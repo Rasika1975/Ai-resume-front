@@ -129,9 +129,46 @@ export default function ResumeBuilderAdvanced() {
   };
 
   // Download PDF (placeholder - you'll connect to backend)
-  const downloadPDF = () => {
-    alert('PDF Download will be implemented with backend');
-  };
+ const downloadPDF = async () => {
+  try {
+    console.log('📥 Requesting PDF download...');
+    console.log('Resume Data:', resumeData);
+
+    const response = await fetch('http://localhost:5000/pdf/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: resumeData
+      })
+    });
+
+    console.log('Response status:', response.status);
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'PDF generation failed');
+    }
+
+    const blob = await response.blob();
+    console.log('✅ PDF received, size:', blob.size);
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${resumeData.personal.fullName || 'Resume'}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    alert('✅ PDF Downloaded Successfully!');
+  } catch (error) {
+    console.error('❌ Download error:', error);
+    alert(`Failed to download PDF: ${error.message}`);
+  }
+};
 
   // Save Resume
   const saveResume = () => {
