@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000', // Your backend URL
+  baseURL: 'https://ai-resume-back-1.onrender.com/auth/register', // Your backend URL
 });
 
 // Add token to requests
