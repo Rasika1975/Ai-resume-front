@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://ai-resume-back-1.onrender.com/auth/register', // Your backend URL
+  baseURL: 'https://ai-resume-back-1.onrender.com', // ✅ only base, no /auth/register
 });
 
 // Add token to requests
@@ -26,12 +26,12 @@ export const deleteResume = (id) => API.delete(`/resume/${id}`);
 
 // ✅ ATS Analyzer API
 export const analyzeResume = (formData) => API.post('/ats/analyze', formData, {
-  headers: { 'Content-Type': 'multipart/form-data' }
+  headers: { 'Content-Type': 'multipart/form-data' },
 });
 
 // ✅ PDF Generator API
 export const generatePDF = (data) => API.post('/pdf/generate', data, {
-  responseType: 'blob'
+  responseType: 'blob',
 });
 
 export default API;
