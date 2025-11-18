@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// ✅ Direct hardcoded URL (no environment variable)
 const API = axios.create({
-  baseURL: 'https://ai-resume-back-1.onrender.com',
-  withCredentials: true,
+  baseURL: 'https://ai-resume-back-1.onrender.com', // ✅ only base, no /auth/register
 });
 
 // Add token to requests
