@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+// ✅ Environment variable use karo, fallback to production
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://ai-resume-back-1.onrender.com';
+
+console.log('🔗 Using API:', API_BASE_URL); // Debug ke liye
+
 const API = axios.create({
-  baseURL: 'https://ai-resume-back-1.onrender.com', // ✅ only base, no /auth/register
+  baseURL: API_BASE_URL,
+  withCredentials: true, // Important for cookies/auth
 });
 
 // Add token to requests
@@ -12,6 +18,20 @@ API.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// ✅ Better error logging
+API.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('❌ API Error:', {
+      url: error.config?.url,
+      method: error.config?.method,
+      status: error.response?.status,
+      message: error.response?.data?.message || error.message
+    });
+    return Promise.reject(error);
+  }
+);
 
 // ✅ Auth APIs
 export const registerUser = (data) => API.post('/auth/register', data);
